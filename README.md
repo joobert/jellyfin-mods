@@ -104,7 +104,7 @@ div.mainDrawer {background-color: rgba(0,0,0,0.6) !important;}
 
 ### Hide the "Trailers" tab from movie libraries:
 
-*Note: This mod currently also hides the "Upcoming" tab from TV show libraries. Please submit a PR if you find a way to hide only the "Trailers" tab.
+*Note: This mod currently also hides the "Upcoming" tab from TV show libraries. Please submit a PR if you find a way to hide only the "Trailers" tab.*
 
 ```css
 /*Hide the "Trailers" tab in Movies and the "Upcoming" tab in TV Shows*/
@@ -929,7 +929,7 @@ To apply the fireworks theme simply add:
 <link rel="stylesheet" href="seasonal/fireworks.css">
 ```
 
-Note: A known bug with fireworks is they don't scroll with the user, they stay near the top of the page, and may cause infinite loading due to a JS bug... this does need fixing.
+*Note: A known bug with fireworks is they don't scroll with the user, they stay near the top of the page, and may cause infinite loading due to a JS bug... this does need fixing.*
 
 ### Hearts 
 
