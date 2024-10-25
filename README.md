@@ -18,25 +18,27 @@ If you are having issues with finding the web root, you may need to see the [hel
     - [Hide the "Trailers" tab from movie libraries](#hide-the-trailers-tab-from-movie-libraries)
     - [Use the media item's logo and hide title when present](#use-the-media-items-logo-and-hide-title-when-present)
     - [Remove the "My Media" section title](#remove-the-my-media-section-title)
+  - [Featured Content Bar](#featured-content-bar)
   - [Custom Netflix-like login page](#custom-netflix-like-login-page)
   - [Avatar library for your users](#avatar-library-for-your-users)
   - [Change the title of the page](#change-the-title-of-the-page)
+  - [Change the favicon](#change-the-favicon)
   - [Change the default iOS/Android "app" title and description](#change-the-default-iosandroid-app-title-and-description)
-  - [Featured Content Bar](#featured-content-bar)
+  - [Add a custom logo at the top of the login page](#add-a-custom-logo-at-the-top-of-the-login-page)
+  - [Add a custom link button under the login page](#add-a-custom-link-button-under-the-login-page)
+  - [Add a custom logo to side menu](#add-a-custom-logo-to-side-menu)
+  - [Add a custom link to side menu](#add-a-custom-link-to-side-menu)
+  - [Add requests tab](#add-requests-tab)
+  - [Custom library icons in side menu](#custom-library-icons-in-side-menu)
+  - [Custom library icons on home page](#custom-library-icons-on-home-page)
   - [Force backdrops for all users](#force-backdrops-for-all-users)
   - [Force theme music for all users](#force-theme-music-for-all-users)
   - [Force disable "Show next video info during playback"](#force-disable-show-next-video-info-during-playback)
   - [Change font to whatever you want](#change-font-to-whatever-you-want)
   - [Set limit on how long items should be in the next up section](#set-limit-on-how-long-items-should-be-in-the-next-up-section)
-  - [Add a custom logo at the top of the login page](#add-a-custom-logo-at-the-top-of-the-login-page)
-  - [Add a custom link button under the login page](#add-a-custom-link-button-under-the-login-page)
-  - [Add a custom logo to side bar](#add-a-custom-logo-to-side-bar)
-  - [Add a custom link to side bar](#add-a-custom-link-to-side-bar)
-  - [Add requests tab](#add-requests-tab)
   - [Hide scrollbar on older Microsoft edge (Xbox clients)](#hide-scrollbar-on-older-microsoft-edge-xbox-clients)
   - [Pan and tilt the backdrops with fades in and out](#pan-and-tilt-the-backdrops-with-fades-in-and-out)
   - [Default user page size](#default-user-page-size)
-  - [Change the favicon](#change-the-favicon)
   - [Seasonal themes](#omg-seasonal-themes-are-back)
 - [Bugfixes / Workarounds](#bugfixes--workarounds)
 - [Some extra tools to be used with Jellyfin](#some-extra-tools-to-be-used-with-jellyfin)
@@ -96,7 +98,7 @@ body:not(:has(#loginPage:not(.hide))) .skinHeader {
 ### Partially transparent side menu:
 
 ```css
-/*Partially transparent side bar*/
+/*Partially transparent side menu*/
 div.mainDrawer {background-color: rgba(0,0,0,0.6) !important;}
 ```
 
@@ -130,6 +132,18 @@ This mod takes the title text away when an item has a valid logo loaded, thus av
 /*Remove "My Media" title*/
 .section0 .sectionTitle {display: none;}
 ```
+
+---
+
+## Featured Content Bar
+
+<img width="212" alt="Screenshot 2024-05-18 200753" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/d3351fc8-ed95-477c-8bbe-655a0d61d078">
+
+<img width="950" alt="Screenshot 2024-05-18 200934" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/0e0f5b14-30a4-4325-b732-29f6be9308e9">
+
+This allows the user to add custom featured content to be pinned to the homepage. Please see [the separate repo for this](https://github.com/BobHasNoSoul/jellyfin-featured/) for more details.
+
+Allows for the use of a specific account's favorites to promote content, as well as user-defined custom lists that are looped through via crontab.
 
 ---
 
@@ -365,6 +379,38 @@ Reload the cache on your clients to see your changes.
 
 ---
 
+## Change the favicon
+
+<img width="150" alt="Screenshot 2024-05-19 175358" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/48c33a4b-4458-41ce-a240-11a36b268b85">
+
+As of a recent update, the favicon now lives in the web root as a random string followed by .ico
+
+Thankfully, it is the only (should be the only) .ico in there, so run the following command inside your web root to find it:
+```sh
+ls | grep .ico
+``` 
+
+Copy the output of this command, as this is what you will name your custom favicon file.
+
+Now, simply grab your new favicon from wherever and save it to your web root named as the output of the previous grep command. This may require you to either use a volume to map that file to the new file, or simply just replace the file using a new volume that isn't web root in the Docker and mapped to a transfer folder on your server.
+
+Example:
+
+`./transfer:/jellyfin/transfer`
+
+Then you would simply do the following inside the web root after you have created the .ico in the transfer folder on your host. (This only applies to Docker. If you installed without Docker, just replace the file like you would any other file.) 
+
+Run this command from within web root:
+```sh
+cp /jellyfin/transfer/*.ico ./
+```
+
+This will copy the .ico from your transfer folder to the web root without having to do any other weird fancy tricks.
+
+Reload the cache on your clients to see your changes.
+
+---
+
 ## Change the default iOS/Android "app" title and description
 This mod changes the title and description that appear when adding the site to your homescreen as a webapp from "Jellyfin" to your own unique name like "My Awesome Server" or in the example code `<YOUR TITLE HERE>`.
 
@@ -416,15 +462,196 @@ Save the file and reload the cache on your clients to see your changes.
 
 ---
 
-## Featured Content Bar
+## Add a custom logo at the top of the login page
 
-<img width="212" alt="Screenshot 2024-05-18 200753" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/d3351fc8-ed95-477c-8bbe-655a0d61d078">
+<img width="960" alt="Screenshot 2024-05-18 193326" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/e69aea0d-d1a3-4fb0-9e9b-31a008daa8b0">
 
-<img width="950" alt="Screenshot 2024-05-18 200934" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/0e0f5b14-30a4-4325-b732-29f6be9308e9">
 
-This allows the user to add custom featured content to be pinned to the homepage. Please see [the separate repo for this](https://github.com/BobHasNoSoul/jellyfin-featured/) for more details.
+Simply go to your web root and edit the session-login-index-html.xxxxxxxxxxxxxxxxxxxxx.chunk.js file:
 
-Allows for the use of a specific account's favorites to promote content, as well as user-defined custom lists that are looped through via crontab.
+```sh
+sudo nano session-login-index-html.*.bundle.js
+```
+
+Press <kbd>Ctrl</kbd> + <kbd>W</kbd> and find the following string:
+
+```js
+<div class="padded-left padded-right padded-bottom-page margin-auto-y">
+```
+
+Now, directly after this string paste the following (but obviously amend for your own logo, it can even be a GIF if you want):
+
+```js
+<img src="/web/logo.png" width=350px style="padding: 0px;display:block; margin-left: auto; margin-right: auto;">
+```
+
+---
+
+## Add a custom link button under the login page
+
+![Screenshot 2024-08-17 124955](https://github.com/user-attachments/assets/726ea558-464b-4eef-bef5-7e8d0a43cf5d)
+
+In your web root run:
+
+```
+sudo nano session-login-index-html.*.chunk.js
+```
+
+Then, use find and replace ( <kbd>Ctrl</kbd> + <kbd> \ </kbd> ) to find:
+
+```js
+<div class="loginDisclaimer
+```
+
+And replace it with:
+```js
+<a href="https://www.example.com" class="emby-button raised block btnCUSTOMBUTTON">NEW LINK BUTTON TEST</a> <div class="loginDisclaimer
+```
+
+Save the file and reload the cache on your clients to see your changes.
+
+---
+
+## Add a custom logo to side menu
+
+<img width="934" alt="Screenshot 2024-05-18 194802" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/ad1be764-d76b-43e9-9f38-41f683a74e76">
+
+In your web root run:
+
+```sh
+grep -r -l -n 'customMenuOptions' .
+```
+
+This command will output a filename, copy it, then run `sudo nano <YOUR_COPIED_FILENAME>` to edit the file.
+
+Then, use find and replace ( <kbd>Ctrl</kbd> + <kbd> \ </kbd> ) to find:
+
+```css
+<div style="height:.5em;"></div>',n+='
+```
+
+And replace it with the following (obviously replace YOURLOGOURLHERE with your actual URL):
+
+```js
+<div style="height:.5em;"></div>',n+='<img src="YOURLOGOURLHERE" width=250px style="padding: 5px;display:block; margin-left: auto; margin-right: auto;">
+```
+
+Save the file and reload the cache on your clients to see your changes.
+
+---
+
+## Add a custom link to side menu
+
+Find the `config.json` file in your web root. Change the "menuLinks" section to the following and adjust the properties to suit your needs (icons are from [Material Design Icons](https://jossef.github.io/material-design-icons-iconfont/)).
+
+```json
+"menuLinks": [
+{
+    "name": "Custom Link",
+    "url": "https://jellyfin.org"
+},
+{
+    "name": "Custom Link w. Custom Icon",
+    "icon": "attach_money",
+    "url": "https://demo.jellyfin.org/stable"
+}
+],
+```
+
+If you only want one link, make sure to remove the comma after the closing bracket (}). If you want to add more links, add a comma for every entry except the last one.
+
+---
+
+## Add requests tab
+
+![image](https://github.com/user-attachments/assets/b0860546-edc0-4d42-acba-3caa095ee666)
+
+
+- Before doing anything, remember to backup the files we are going to edit
+- Go to your web root and edit the `index.html` file
+- Find `</body></html>` and paste the following right before it:
+```html
+<script>const createRequestTab = () => {const title = document.createElement("div");title.classList.add("emby-button-foreground");title.innerText = "Requisições";const button = document.createElement("button");button.type = "button";button.is = "empty-button";button.classList.add("emby-tab-button", "emby-button", "lastFocused");button.setAttribute("data-index", "2");button.setAttribute("id", "requestTab");button.appendChild(title);(function e() {const tabb = document.querySelector(".emby-tabs-slider");tabb ? !document.querySelector("#requestTab") && tabb.appendChild(button) : setTimeout(e, 500)})();}</script>
+```
+- Save the file with your changes. This is the script that creates the tab.
+- Now edit the `home-html.*.chunk.js` file
+- Find:
+
+```js
+data-backdroptype="movie,series,book">
+```
+
+Then paste the following right after it:
+
+```js
+<style>:root{--save-gut:max(env(safe-area-inset-left),3.3%)}.requestIframe{margin:0 .4em;padding:0 var(--save-gut);width:calc(100% - (.4em * 2) - (var(--save-gut) * 2));height:85vh;border:none;position:absolute;top:0}</style><script>setTimeout(() => {createRequestTab()}, 500)</script>
+```
+
+- This is what will make it look good and start the script that creates the tab.
+- And now, find:
+
+```js
+id="favoritesTab" data-index="1"> <div class="sections"></div> </div>
+```
+
+Then paste the following right after it:
+
+```js
+<div class="tabContent pageTabContent" id="requestsTab" data-index="2"> <div class="sections"><iframe class="requestIframe" src="[YOUR_REQUEST_SERVICE_HERE]"></iframe></div> </div>
+```
+- This is what will make the service open in the correct tab.
+
+For example, I'm using Jellyseerr as my request service, so, my last part would be ```<iframe class="requestIframe" src="[MY_LOCAL_IP]:5055"></iframe>```
+
+---
+
+## Custom library icons in side menu
+
+![side-menu-library-icon-mod](https://github.com/user-attachments/assets/6d281308-2bde-4f00-a0c9-5dd92454a465)
+
+This mod allows you to change the icons of your libraries on the side menu.
+
+First, open Jellyfin in your browser, then open the side menu, right-click on the desired library, and click "Inspect". 
+
+Then, in your browser's developer tools, copy the `<data-itemid>` of the highlighted `<a is=emby-linkbutton></a>` element.
+
+Finally, copy/paste the CSS below into the "Custom CSS code" textbox in the General tab of your Jellyfin admin dashboard, obviously making your own changes (icons are from [Material Design Icons](https://jossef.github.io/material-design-icons-iconfont/)).
+
+
+```css
+/*Change the icon to rice_bowl for the Anime library in the side menu*/
+a[data-itemid="<YOUR_COPIED_DATA-ITEMID>"] .navMenuOptionIcon::before {
+    content: 'rice_bowl';
+    font-family: 'Material Icons';
+}
+
+/*Hide the original icon for the Anime link in the side menu*/
+a[data-itemid="<YOUR_COPIED_DATA-ITEMID>"] .navMenuOptionIcon.folder {
+    display: none;
+}
+```
+
+---
+
+## Custom library icons on home page
+
+![home-page-library-icon-mod](https://github.com/user-attachments/assets/85b28a91-28b5-485e-9d6b-607c16549481)
+
+This mod allows you to change the icons of your libraries on the home page's "My Media (small)" section.
+
+First, open Jellyfin's home page in your browser, then under "My Media", right-click on the desired library, and click "Inspect". 
+
+Then, in your browser's developer tools, copy the `<href>` of the highlighted `<a is=emby-linkbutton></a>` element.
+
+Finally, copy/paste the CSS below into the "Custom CSS code" textbox in the General tab of your Jellyfin admin dashboard, obviously making your own changes (icons are from [Material Design Icons](https://jossef.github.io/material-design-icons-iconfont/)).
+
+```css
+/*Change the icon class to rice_bowl for the Anime link on the home page*/
+a[href="<YOUR_COPIED_HREF>"] .homeLibraryIcon::before {
+    content: 'rice_bowl';
+    font-family: 'Material Icons';
+}
+```
 
 ---
 
@@ -555,149 +782,6 @@ Save the file and reload the cache on your clients to see your changes.
 
 ---
 
-## Add a custom logo at the top of the login page
-
-<img width="960" alt="Screenshot 2024-05-18 193326" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/e69aea0d-d1a3-4fb0-9e9b-31a008daa8b0">
-
-
-Simply go to your web root and edit the session-login-index-html.xxxxxxxxxxxxxxxxxxxxx.chunk.js file:
-
-```sh
-sudo nano session-login-index-html.*.bundle.js
-```
-
-Press <kbd>Ctrl</kbd> + <kbd>W</kbd> and find the following string:
-
-```js
-<div class="padded-left padded-right padded-bottom-page margin-auto-y">
-```
-
-Now, directly after this string paste the following (but obviously amend for your own logo, it can even be a GIF if you want):
-
-```js
-<img src="/web/logo.png" width=350px style="padding: 0px;display:block; margin-left: auto; margin-right: auto;">
-```
-
----
-
-## Add a custom link button under the login page
-
-![Screenshot 2024-08-17 124955](https://github.com/user-attachments/assets/726ea558-464b-4eef-bef5-7e8d0a43cf5d)
-
-In your web root run:
-
-```
-sudo nano session-login-index-html.*.chunk.js
-```
-
-Then, use find and replace ( <kbd>Ctrl</kbd> + <kbd> \ </kbd> ) to find:
-
-```js
-<div class="loginDisclaimer
-```
-
-And replace it with:
-```js
-<a href="https://www.example.com" class="emby-button raised block btnCUSTOMBUTTON">NEW LINK BUTTON TEST</a> <div class="loginDisclaimer
-```
-
-Save the file and reload the cache on your clients to see your changes.
-
----
-
-## Add a custom logo to side bar
-
-<img width="934" alt="Screenshot 2024-05-18 194802" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/ad1be764-d76b-43e9-9f38-41f683a74e76">
-
-In your web root run:
-
-```sh
-grep -r -l -n 'customMenuOptions' .
-```
-
-This command will output a filename, copy it, then run `sudo nano <YOUR_COPIED_FILENAME>` to edit the file.
-
-Then, use find and replace ( <kbd>Ctrl</kbd> + <kbd> \ </kbd> ) to find:
-
-```css
-<div style="height:.5em;"></div>',n+='
-```
-
-And replace it with the following (obviously replace YOURLOGOURLHERE with your actual URL):
-
-```js
-<div style="height:.5em;"></div>',n+='<img src="YOURLOGOURLHERE" width=250px style="padding: 5px;display:block; margin-left: auto; margin-right: auto;">
-```
-
-Save the file and reload the cache on your clients to see your changes.
-
----
-
-## Add a custom link to side bar
-
-Find the `config.json` file in your web root. Change the "menuLinks" section to the following and adjust the properties to suit your needs (icons are from [Material Design Icons](https://jossef.github.io/material-design-icons-iconfont/)).
-
-```json
-"menuLinks": [
-{
-    "name": "Custom Link",
-    "url": "https://jellyfin.org"
-},
-{
-    "name": "Custom Link w. Custom Icon",
-    "icon": "attach_money",
-    "url": "https://demo.jellyfin.org/stable"
-}
-],
-```
-
-If you only want one link, make sure to remove the comma after the closing bracket (}). If you want to add more links, add a comma for every entry except the last one.
-
----
-
-## Add requests tab
-
-![image](https://github.com/user-attachments/assets/b0860546-edc0-4d42-acba-3caa095ee666)
-
-
-- Before doing anything, remember to backup the files we are going to edit
-- Go to your web root and edit the `index.html` file
-- Find `</body></html>` and paste the following right before it:
-```html
-<script>const createRequestTab = () => {const title = document.createElement("div");title.classList.add("emby-button-foreground");title.innerText = "Requisições";const button = document.createElement("button");button.type = "button";button.is = "empty-button";button.classList.add("emby-tab-button", "emby-button", "lastFocused");button.setAttribute("data-index", "2");button.setAttribute("id", "requestTab");button.appendChild(title);(function e() {const tabb = document.querySelector(".emby-tabs-slider");tabb ? !document.querySelector("#requestTab") && tabb.appendChild(button) : setTimeout(e, 500)})();}</script>
-```
-- Save the file with your changes. This is the script that creates the tab.
-- Now edit the `home-html.*.chunk.js` file
-- Find:
-
-```js
-data-backdroptype="movie,series,book">
-```
-
-Then paste the following right after it:
-
-```js
-<style>:root{--save-gut:max(env(safe-area-inset-left),3.3%)}.requestIframe{margin:0 .4em;padding:0 var(--save-gut);width:calc(100% - (.4em * 2) - (var(--save-gut) * 2));height:85vh;border:none;position:absolute;top:0}</style><script>setTimeout(() => {createRequestTab()}, 500)</script>
-```
-
-- This is what will make it look good and start the script that creates the tab.
-- And now, find:
-
-```js
-id="favoritesTab" data-index="1"> <div class="sections"></div> </div>
-```
-
-Then paste the following right after it:
-
-```js
-<div class="tabContent pageTabContent" id="requestsTab" data-index="2"> <div class="sections"><iframe class="requestIframe" src="[YOUR_REQUEST_SERVICE_HERE]"></iframe></div> </div>
-```
-- This is what will make the service open in the correct tab.
-
-For example, I'm using Jellyseerr as my request service, so, my last part would be ```<iframe class="requestIframe" src="[MY_LOCAL_IP]:5055"></iframe>```
-
----
-
 ## Hide scrollbar on older Microsoft edge (Xbox clients) 
 
 ```sh
@@ -778,7 +862,7 @@ filter: blur(0px);
 }
 }
 ```
-Just paste that into your custom CSS in the General tab of your Jellyfin admin dashboard and click save.
+Just copy/paste that into the "Custom CSS code" textbox in the General tab of your Jellyfin admin dashboard and click save.
 
 ---
 
@@ -804,34 +888,6 @@ this.get("libraryPageSize",!1),10);return 0===t?0:t||300}
 You can modify the number from 100 to any number you want the user default to be.
 
 Save the file and reload the cache on your clients to see your changes.
-
----
-
-## Change the favicon
-
-<img width="150" alt="Screenshot 2024-05-19 175358" src="https://github.com/BobHasNoSoul/jellyfin-mods/assets/23018412/48c33a4b-4458-41ce-a240-11a36b268b85">
-
-
-As of a recent update, the favicon now lives in the web root as a random string followed by .ico
-
-Thankfully, it is the only (should be the only) .ico in there, so run the following command inside your web root to find it:
-`ls | grep .ico` 
-
-Copy the output of this command, as this is what you will name your custom favicon file.
-
-Now, simply grab your new favicon from wherever and save it to your web root named as the output of the previous grep command. This may require you to either use a volume to map that file to the new file, or simply just replace the file using a new volume that isn't web root in the Docker and mapped to a transfer folder on your server.
-
-Example:
-
-`./transfer:/jellyfin/transfer`
-
-Then you would simply do the following inside the web root after you have created the .ico in the transfer folder on your host. (This only applies to Docker. If you installed without Docker, just replace the file like you would any other file.) 
-
-Run this command from within web root `cp /jellyfin/transfer/*.ico ./`
-
-This will copy the .ico from your transfer folder to the web root without having to do any other weird fancy tricks.
-
-Reload the cache on your clients to see your changes.
 
 ---
 
@@ -937,7 +993,7 @@ These are some extremely helpful tools that can be used with Jellyfin to increas
 ### Jfa-Go
 This is a Jellyfin account management tool that can be used to generate links to invite people to your Jellyfin server and allow them to create their own username and password. It's written in Go and can be installed on most OS's. You can get it here: https://github.com/hrfee/jfa-go
 ### Jellyseerr
-A free and open source software application for managing requests for your media library. After adding a custom link in the side bar, when your friends or family want to request media, they can request it using Jellyseerr, which also integrates with Radarr, Sonarr, and other relevant services. You can get it here: https://github.com/Fallenbagel/jellyseerr
+A free and open source software application for managing requests for your media library. After adding a custom link in the side menu, when your friends or family want to request media, they can request it using Jellyseerr, which also integrates with Radarr, Sonarr, and other relevant services. You can get it here: https://github.com/Fallenbagel/jellyseerr
 ### Ombi
 A legacy alternative to Jellyseerr, Ombi is a media requesting service that can be used with Jellyfin. You can get it here: https://github.com/Ombi-app/Ombi
 ### ErsatzTV
