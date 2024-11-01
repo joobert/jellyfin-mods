@@ -1,6 +1,6 @@
 # jellyfin-mods
 
-### These mods are working and tested on **Jellyfin 10.9.x** (mods for older versions can be found [here](https://github.com/BobHasNoSoul/jellyfin-mods/blob/main/10.8.x.md)). More will be added when I get the chance, or if you want please feel free to submit a pull request with your own mods to add to the collection. 
+### These mods are working and tested on **Jellyfin 10.9.x** (mods for older versions can be found [here](https://github.com/BobHasNoSoul/jellyfin-mods/tree/main/archive)). More will be added when I get the chance, or if you want please feel free to submit a pull request with your own mods to add to the collection. 
 
 If you are having issues with finding the web root, you may need to see the [help.md](https://github.com/BobHasNoSoul/jellyfin-mods/blob/main/help.md) to find help with your particular deployment.
 
@@ -124,6 +124,7 @@ This mod takes the title text away when an item has a valid logo loaded, thus av
 /*If the logo is present on the details page of an item, hide the items' title*/
 #itemDetailPage .itemName.infoText.parentNameLast > bdi:nth-child(1) {display: none;}
 .hide+.detailPageWrapperContainer .itemName > bdi:nth-child(1) {display: block !important;}
+
 /*Do the same for the single episodes link back title*/
 #itemDetailPage .parentName > bdi:nth-child(1) {display: none;}
 .hide+.parentName > bdi:nth-child(1) {display: block !important;}
