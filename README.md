@@ -104,12 +104,15 @@ div.mainDrawer {background-color: rgba(0,0,0,0.6) !important;}
 
 ### Hide the "Trailers" tab from movie libraries:
 
-*Note: This mod currently also hides the "Upcoming" tab from TV show libraries. Please submit a PR if you find a way to hide only the "Trailers" tab.*
-
 ```css
-/*Hide the "Trailers" tab in Movies and the "Upcoming" tab in TV Shows*/
-.emby-tab-button[data-index="2"] {
-  display: none !important;
+/*Hide "Trailers" from movie libraries*/
+body:has(#moviesPage:not(.hide)) .emby-tab-button[data-index="2"] {
+    display: none !important;
+}
+
+/*Ensure "Upcoming" in TV libraries remains visible*/
+body:not(:has(#moviesPage:not(.hide))) .emby-tab-button[data-index="2"] {
+    display: inline-block !important;
 }
 ```
 
